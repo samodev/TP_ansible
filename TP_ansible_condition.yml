@@ -1,0 +1,43 @@
+---
+
+  - name: Premier tp Ansible de Stephane AMOUDI
+    hosts: 127.0.0.1
+    become: true
+    vars:
+      home: /home/student3
+      user: student3
+      group: devops3
+    tasks:
+      - name: create group if not exists
+        group:
+          name:  "{{group}}"
+          state: present
+
+      - name: create user if not exists
+        user:
+          name: "{{user}}"
+          home: "{{home}}"
+          group: "{{group}}"
+          state: present
+
+      - name: chmod home directory
+        file:
+          path: "{{home}}"
+          owner: "{{user}}"
+          mode: 0755
+          group: "{{group}}"
+          state: directory
+
+      - name: Installing httpd (Apache)
+        yum:
+          name: httpd
+          state: latest
+        register: Output
+
+      - name: start service httpd - if install succeeded
+        service:
+          name: httpd
+          state: started
+        when: Output is succeeded
+                
+...

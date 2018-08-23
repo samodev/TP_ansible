@@ -1,0 +1,23 @@
+---
+
+  - name: Premier tp Ansible de Stephane AMOUDI
+    hosts: 127.0.0.1
+    remote_user: student
+    become: true
+    vars:
+      home: /home/student2
+      user: student2
+      group: devops2
+    tasks:
+      - name: create user
+        command: useradd {{user}}
+
+      - name: chmod user directory
+        command: chmod -R 755 {{home}}
+
+      - name: create group
+        command: groupadd {{group}}
+
+      - name: add user to group
+        command: usermod -g {{group}} {{user}}
+...
